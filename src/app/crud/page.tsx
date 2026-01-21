@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { emailValidator, passwordValidator } from "@/lib/input";
 import Table from "@/components/Table";
 import MockTable from "@/components/Mocktable";
+import Link from "next/link";
 
 export default function crud() {
     const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -38,6 +39,10 @@ export default function crud() {
         <div className={styles.page}>
             <main className={styles.main}>
                 <h1>게시판 기능</h1>
+                <Link href="/" className={styles.card}>
+                    <h2>&larr; 메인 페이지</h2>
+                    <p>메인 페이지로 이동</p>
+                </Link>
                 {!isLogin &&
                     <>
                         <form onSubmit={onSubmit}>
@@ -59,7 +64,7 @@ export default function crud() {
                             />
                             <button type="submit">로그인</button>
                         </form>
-                        <MockTable />
+                        {/* <MockTable /> */}
                     </>
                 }
                 {isLogin &&

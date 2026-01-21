@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postGetMyResData, postGetReqData, postGetResData, postItemData } from "@/types/api";
-import { getMyPosts, getPosts, getSinglePost } from "./axios";
+import { getChartData, getMyPosts, getPosts, getSinglePost } from "./axios";
 
 
 export const useGetMyPosts = (params: postGetReqData) => {
@@ -40,5 +40,11 @@ export const useGetSinglePost = (id: string) => {
     return useQuery<postItemData>({
         queryKey: ['post', id],
         queryFn: () => getSinglePost(id),
+    });
+}
+export const useGetChartData = <T>(id: string) => {
+    return useQuery<T>({
+        queryKey: ['chart', id],
+        queryFn: () => getChartData(id),
     });
 }

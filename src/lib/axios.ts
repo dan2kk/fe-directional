@@ -57,3 +57,8 @@ export const deleteSinglePost = async (id: string) => {
     const res = await client.delete(`/posts/${id}`);
     return res.data;
 }
+
+export const getChartData = async <T extends string>(id: T) => {
+    const res = await client.get(`/mock/${id}`);
+    return res.data;
+}

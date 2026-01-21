@@ -105,7 +105,7 @@ export type snackImpactData = {
     name: string
     metrics: {
         snacks: number;
-        meetingMissed: number;
+        meetingsMissed: number;
         morale: number;
     }[]
 }
