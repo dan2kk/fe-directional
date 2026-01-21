@@ -1,11 +1,11 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { MantineReactTable, MRT_ColumnFiltersState, MRT_SortingState, useMantineReactTable, type MRT_ColumnDef } from 'mantine-react-table';
-import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
 import { Category, postGetResData, postItemData } from "@/types/api";
 import { useGetMyPosts } from "@/lib/query";
 import { parseFilters, parseSorting } from "@/utils/tablesort";
 import { Loader, Center } from '@mantine/core';
 import { deleteAllPosts } from "@/lib/axios";
+import { useRouter } from "next/navigation";
 
 export default function Table() {
 
@@ -66,14 +66,27 @@ export default function Table() {
     const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
     const [search, setSearch] = useState<string>('');
-
+    const router = useRouter();
+    const divRef = useRef<HTMLButtonElement>(null);
     const apiParams = useMemo(() => ({
         ...parseFilters(columnFilters),
         ...parseSorting<'createdAt' | 'title'>(sorting),
         search,
-        limit: 10,
+        limit: 7,
     }), [columnFilters, sorting, search]);
     const { data, isLoading, fetchNextPage, hasNextPage, refetch } = useGetMyPosts(apiParams);
+
+    useEffect(() => {
+        if (divRef.current) {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasNextPage) {
+                    fetchNextPage();
+                }
+            }, { threshold: 0.5 });
+            observer.observe(divRef.current);
+            return () => observer.disconnect();
+        }
+    }, [divRef, fetchNextPage, hasNextPage]);
     const postsData = useMemo(() => data?.pages.flatMap((page) => page.items) || [], [data]);
     const myTable = useMantineReactTable({
         columns,
@@ -86,19 +99,29 @@ export default function Table() {
         onColumnFiltersChange: setColumnFilters,
         onSortingChange: setSorting,
         onGlobalFilterChange: setSearch,
+        enableStickyHeader: true,
+        mantineTableContainerProps: {
+            sx: {
+                maxHeight: 'calc(100vh - 200px)',
+                maxWidth: '100%',
+            },
+        },
+        mantineTableBodyRowProps: ({ row }) => ({
+            onClick: () => {
+                router.push("/crud/" + row.original.id);
+            },
+            sx: {
+                cursor: 'pointer',
+            },
+        }),
+
     });
     return (
-        isLoading ? (
-            <Center style={{ height: '100%' }}>
-                <Loader color="blue" size="xl" type="dots" />
-            </Center>
-        ) : (
-            <>
-                <MantineReactTable
-                    table={myTable}
-                />
-                <button onClick={() => { deleteAllPosts().then(() => refetch()) }}>모든 게시글 삭제</button>
-            </>
-        )
+        <>
+            <MantineReactTable
+                table={myTable}
+            />
+            <button onClick={() => { deleteAllPosts().then(() => refetch()) }} ref={divRef}>모든 게시글 삭제</button>
+        </>
     );
 }

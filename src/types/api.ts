@@ -38,6 +38,14 @@ export type postGetResData = {
     items: postItemData[];
     count: number;
 }
+export type singlePostUpdateReqData = {
+    title?: string;
+    body?: string;
+    category?: Category;
+    tags?: string[];
+}
+
+
 export enum Category {
     NOTICE = 'NOTICE',
     QNA = 'QNA',

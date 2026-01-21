@@ -1,12 +1,12 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { postGetMyResData, postGetReqData, postGetResData } from "@/types/api";
-import { getMyPosts, getPosts } from "./axios";
+import { postGetMyResData, postGetReqData, postGetResData, postItemData } from "@/types/api";
+import { getMyPosts, getPosts, getSinglePost } from "./axios";
 
 
 export const useGetMyPosts = (params: postGetReqData) => {
     return useInfiniteQuery<postGetMyResData>({
         queryKey: ['posts', params],
-        initialPageParam: 1,
+        initialPageParam: undefined,
         queryFn: ({ pageParam }) =>
             getMyPosts({
                 ...params,
@@ -36,3 +36,9 @@ export const useGetPosts = (params: number) => {
         },
     });
 };
+export const useGetSinglePost = (id: string) => {
+    return useQuery<postItemData>({
+        queryKey: ['post', id],
+        queryFn: () => getSinglePost(id),
+    });
+}

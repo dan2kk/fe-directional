@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { MantineReactTable, useMantineReactTable, type MRT_ColumnDef } from 'mantine-react-table';
 import { Category, postGetResData, postItemData } from "@/types/api";
 import { useGetPosts } from "@/lib/query";
@@ -6,6 +6,7 @@ import { useGetPosts } from "@/lib/query";
 
 export default function MockTable() {
     const [page, setPage] = useState<number>(2);
+    const divRef = useRef<HTMLDivElement>(null);
     const columns = useMemo<MRT_ColumnDef<postItemData>[]>(
         () => [
             {
@@ -60,7 +61,7 @@ export default function MockTable() {
         ],
         [],
     );
-    const { data, isLoading, fetchNextPage, hasNextPage } = useGetPosts(10);
+    const { data, isLoading, fetchNextPage, hasNextPage } = useGetPosts(20);
     const postsData = useMemo(() => data?.pages.flatMap((page) => page.items) || [], [data]);
     const myTable = useMantineReactTable({
         columns,
@@ -69,9 +70,24 @@ export default function MockTable() {
         enableColumnResizing: true,
         enableHiding: true,
     });
+    useEffect(() => {
+        if (divRef.current) {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    console.log('intersecting');
+                    fetchNextPage();
+                }
+            });
+            observer.observe(divRef.current);
+        }
+    }, [divRef])
+
     return (
-        <MantineReactTable
-            table={myTable}
-        />
+        <div style={{ height: '100vh' }}>
+            <MantineReactTable
+                table={myTable}
+            />
+            <div ref={divRef}>  </div>
+        </div>
     );
 }

@@ -1,0 +1,151 @@
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 3rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    /* Soft shadow for elevation */
+    color: #333;
+    font-family: var(--font-noto-sans-kr), sans-serif;
+    box-sizing: border-box;
+}
+
+.titleInput {
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    border: none;
+    border-bottom: 2px solid #eaeaea;
+    padding: 0.5rem 0;
+    margin-bottom: 2rem;
+    outline: none;
+    background: transparent;
+    transition: border-color 0.2s ease;
+    font-family: inherit;
+}
+
+.titleInput:focus {
+    border-bottom-color: #333;
+}
+
+.titleInput::placeholder {
+    color: #ccc;
+}
+
+.metaSection {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.bodyTextarea {
+    width: 100%;
+    min-height: 500px;
+    /* Minimum height requirement */
+    border: none;
+    outline: none;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #333;
+    resize: vertical;
+    background: transparent;
+    font-family: inherit;
+}
+
+.bodyTextarea::placeholder {
+    color: #ccc;
+}
+
+.tagContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 3rem;
+}
+
+.tagLabel {
+    font-weight: 600;
+    color: #888;
+    margin-right: 0.5rem;
+}
+
+.tagBubble {
+    background-color: #f1f3f5;
+    color: #495057;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.tagBubble:hover {
+    background-color: #e9ecef;
+}
+
+.tagInput {
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    padding: 0.25rem 0;
+    flex-grow: 1;
+    background: transparent;
+    min-width: 150px;
+    font-family: inherit;
+}
+
+.submitButton {
+    display: block;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+    background-color: #555;
+    transform: translateY(-1px);
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.buttonGroup>button {
+    margin-top: 0;
+    flex: 1;
+}
+
+.deleteButton {
+    padding: 1rem;
+    background-color: #fa5252;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.deleteButton:hover {
+    background-color: #ff8787;
+    transform: translateY(-1px);
+}

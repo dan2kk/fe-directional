@@ -12,12 +12,10 @@ function useDebounce<T>(value: T, delay: number): T {
 
     useEffect(() => {
         const handler = setTimeout(() => {
-            console.log('debouncedValue:', debouncedValue);
             setDebouncedValue(value);
         }, delay);
 
         return () => {
-            console.log('clearTimeout');
             clearTimeout(handler);
         };
     }, [value, delay]);

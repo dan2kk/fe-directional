@@ -1,21 +1,38 @@
 "use client"
 import styles from "@/styles/Post.module.css";
 import { Select } from "@mantine/core";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, use } from "react";
+import { Loader, Center } from '@mantine/core';
 import useInput from "@/hooks/useInput";
-import { updatePost } from "@/lib/axios";
+import { updateSinglePost, deleteSinglePost } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { bodyValidator, titleValidator } from "@/lib/input";
 import { Category } from "@/types/api";
+import { useGetSinglePost } from "@/lib/query";
 
-export default function Create() {
+interface PageProps {
+    params: Promise<{ id: string }>;
+}
+
+export default function Detail({ params }: PageProps) {
+    const { id } = use(params);
+    const { data, isLoading } = useGetSinglePost(id);
     const router = useRouter();
+
     const inputTitle = useInput("", titleValidator);
     const inputBody = useInput("", bodyValidator);
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState("");
-
     const [category, setCategory] = useState<Category>(Category.NOTICE);
+
+    useEffect(() => {
+        if (data) {
+            inputTitle.setValue(data.title || "");
+            inputBody.setValue(data.body || "");
+            setTags(data.tags || []);
+            setCategory(data.category as Category || Category.NOTICE);
+        }
+    }, [data]);
 
     const onTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' || e.key === ',') {
@@ -34,7 +51,7 @@ export default function Create() {
         setTags(tags.filter(tag => tag !== tagToRemove));
     };
 
-    const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!inputTitle.validate() || !inputBody.validate() || tags.length === 0 || tags.length > 4) {
@@ -42,18 +59,31 @@ export default function Create() {
             return;
         }
 
-        updatePost({
+        await updateSinglePost(id, {
             title: inputTitle.value,
             body: inputBody.value,
             category: category,
             tags: tags
         }).then((res) => {
+            alert("게시글이 수정되었습니다.");
             router.push('/crud');
         }).catch((err) => {
             console.error(err);
-            alert("글 작성에 실패했습니다.");
+            alert("게시글 수정에 실패했습니다.");
         });
-    }, [inputTitle.value, inputBody.value, category, tags, router]);
+    }, [id, inputTitle.value, inputBody.value, category, tags, router]);
+
+    const onDelete = useCallback(async () => {
+        if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+            await deleteSinglePost(id).then((res) => {
+                alert("게시글이 삭제되었습니다.");
+                router.push('/crud');
+            }).catch((err) => {
+                console.error(err);
+                alert("게시글 삭제에 실패했습니다.");
+            });
+        }
+    }, [id, router]);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -63,6 +93,11 @@ export default function Create() {
             }
         }
     }, [router]);
+
+    if (isLoading) return (
+        <Center style={{ height: '100%' }}>
+            <Loader color="blue" size="xl" type="dots" />
+        </Center>);
 
     return (
         <div className={styles.container}>
@@ -113,9 +148,14 @@ export default function Create() {
                     />
                 </div>
 
-                <button type="submit" className={styles.submitButton}>
-                    등록하기
-                </button>
+                <div className={styles.buttonGroup}>
+                    <button type="submit" className={styles.submitButton}>
+                        수정하기
+                    </button>
+                    <button type="button" className={styles.deleteButton} onClick={onDelete}>
+                        삭제하기
+                    </button>
+                </div>
             </form>
         </div>
     );

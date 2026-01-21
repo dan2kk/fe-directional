@@ -40,6 +40,9 @@ export function bodyValidator(value: string) {
 
 export function tagValidator(value: string) {
     const tags = value.split(',');
+    if (value.length === 0) {
+        return "태그를 입력해주세요.";
+    }
     if (tags.length > 5) {
         return "태그는 최대 5개까지 가능합니다.";
     }

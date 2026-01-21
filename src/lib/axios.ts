@@ -45,3 +45,15 @@ export const deleteAllPosts = async () => {
     const res = await client.delete(`/posts`);
     return res.data;
 }
+export const getSinglePost = async (id: string) => {
+    const res = await client.get(`/posts/${id}`);
+    return res.data;
+}
+export const updateSinglePost = async (id: string, data: postUpdateReqData) => {
+    const res = await client.patch(`/posts/${id}`, data);
+    return res.data;
+}
+export const deleteSinglePost = async (id: string) => {
+    const res = await client.delete(`/posts/${id}`);
+    return res.data;
+}
