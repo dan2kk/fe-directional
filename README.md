@@ -50,4 +50,4 @@ npm run dev #개발 서버 구동
 
 ## 배포 링크
 
-[Vercel 링크](https://fe-directional-deploy.vercel.app//)
+[Vercel 링크](https://fe-directional-deploy.vercel.app/)
