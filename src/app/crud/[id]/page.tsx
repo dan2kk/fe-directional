@@ -87,7 +87,7 @@ export default function Detail({ params }: PageProps) {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            if (!localStorage.getItem('token')) {
+            if (!sessionStorage.getItem('token')) {
                 alert("로그인이 필요한 기능입니다.");
                 router.push('/crud');
             }

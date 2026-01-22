@@ -20,7 +20,7 @@ npm run dev #개발 서버 구동
 1. 로그인 화면 (`/crud`)
     1. `Input` 컴포넌트와 `useInput` 커스텀 훅을 사용하여 이메일 과 비밀번호 입력 창 구현
     2. 각각 `emailValidator`, `passwordValidator` 로 이메일 규칙 과 비밀번호 규칙 검증
-    3. 검증 절차 후에 `authLogin`을 호출하여 `localStorage`에 발급받은 토큰 저장.
+    3. 검증 절차 후에 `authLogin`을 호출하여 `sessionStorage`에 발급받은 토큰 저장.
 2. 게시판 리스트 화면(`/crud`)
     1. `matine-react-table` 라이브러리를 활용하여 테이블 구현
     2. 각각의 row는 크기 조절 및 숨김 처리가 가능

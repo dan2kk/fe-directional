@@ -15,7 +15,7 @@ export default function crud() {
     const router = useRouter();
 
     useEffect(() => {
-        if (localStorage.getItem('token')) {
+        if (sessionStorage.getItem('token')) {
             setIsLogin(true);
         }
     }, []);
@@ -28,7 +28,7 @@ export default function crud() {
             return;
         }
         authLogin(inputId.value, inputPw.value).then((res) => {
-            localStorage.setItem('token', res.token);
+            sessionStorage.setItem('token', res.token);
             setIsLogin(true);
         }).catch((err) => {
             console.log(err);
@@ -65,7 +65,7 @@ export default function crud() {
                 }
                 {isLogin &&
                     <>
-                        <button onClick={() => { localStorage.removeItem('token'); setIsLogin(false); }}>로그아웃</button>
+                        <button onClick={() => { sessionStorage.removeItem('token'); setIsLogin(false); }}>로그아웃</button>
                         <Table />
                         <button onClick={() => { router.push('/crud/create') }}>글쓰기</button>
                     </>

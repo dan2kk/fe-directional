@@ -18,7 +18,7 @@ export const useGetMyPosts = (params: postGetReqData) => {
             }
             return lastPage.nextCursor;
         },
-        enabled: typeof window !== 'undefined' && !!localStorage.getItem('token'),
+        enabled: typeof window !== 'undefined' && !!sessionStorage.getItem('token'),
     });
 };
 export const useGetPosts = (params: number) => {
