@@ -41,7 +41,7 @@ export default function crud() {
                 <h1>게시판 기능</h1>
                 {!isLogin &&
                     <>
-                        <form onSubmit={onSubmit}>
+                        <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '50%', margin: '0 auto' }}>
                             <Input
                                 label="이메일"
                                 type="email"
