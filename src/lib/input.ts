@@ -30,8 +30,9 @@ export function bodyValidator(value: string) {
         return "내용은 2000자 이하여야 합니다.";
     }
     const filterValue = ["캄보디아", "프놈펜", "불법체류", "텔레그램"];
+    const filterRegex = filterValue.map(word => new RegExp(word.split('').join('[\\s\\W_]*'), 'gi'));
     for (let i = 0; i < filterValue.length; i++) {
-        if (value.includes(filterValue[i])) {
+        if (value.match(filterRegex[i])) {
             return "내용에 금지된 단어가 포함되어 있습니다.";
         }
     }
