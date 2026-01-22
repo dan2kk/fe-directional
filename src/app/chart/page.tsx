@@ -11,16 +11,22 @@ import StackedBarChart from "@/components/StackedBarChart";
 import AreaChart from "@/components/AreaChart";
 import MultilineChart from "@/components/MultilineChart";
 
+interface ChartItem {
+    chartData: any;
+    isError: boolean;
+    ChartComponent: React.ComponentType<any>;
+}
+
 
 export default function Chart() {
-    const { data: chartData1 } = useGetChartData<topCoffeeBrandResData>('top-coffee-brands');
-    const { data: chartData2 } = useGetChartData<popularSnackResData>('popular-snack-brands');
-    const { data: chartData3 } = useGetChartData<weeklyMoodTrendResData>('weekly-mood-trend');
-    const { data: chartData4 } = useGetChartData<weeklyWorkoutTrendResData>('weekly-workout-trend');
-    const { data: chartData5 } = useGetChartData<coffeeConsumptionResData>('coffee-consumption');
-    const { data: chartData6 } = useGetChartData<snackImpactResData>('snack-impact');
+    const { data: chartData1, isError: isError1 } = useGetChartData<topCoffeeBrandResData>('top-coffee-brands');
+    const { data: chartData2, isError: isError2 } = useGetChartData<popularSnackResData>('popular-snack-brands');
+    const { data: chartData3, isError: isError3 } = useGetChartData<weeklyMoodTrendResData>('weekly-mood-trend');
+    const { data: chartData4, isError: isError4 } = useGetChartData<weeklyWorkoutTrendResData>('weekly-workout-trend');
+    const { data: chartData5, isError: isError5 } = useGetChartData<coffeeConsumptionResData>('coffee-consumption');
+    const { data: chartData6, isError: isError6 } = useGetChartData<snackImpactResData>('snack-impact');
 
-    const chachedChartData1 = useMemo(() => {
+    const cachedChartData1 = useMemo(() => {
         if (!chartData1) return null;
         return {
             labels: chartData1.map((item) => item.brand),
@@ -30,7 +36,7 @@ export default function Chart() {
         }
     }, [chartData1]);
 
-    const chachedChartData2 = useMemo(() => {
+    const cachedChartData2 = useMemo(() => {
         if (!chartData2) return null;
         return {
             labels: chartData2.map((item) => item.name),
@@ -40,7 +46,7 @@ export default function Chart() {
         }
     }, [chartData2]);
 
-    const chachedChartData3 = useMemo(() => {
+    const cachedChartData3 = useMemo(() => {
         if (!chartData3) return null;
         return {
             labels: chartData3.map((item) => item.week),
@@ -50,7 +56,7 @@ export default function Chart() {
         };
     }, [chartData3]);
 
-    const chachedChartData4 = useMemo(() => {
+    const cachedChartData4 = useMemo(() => {
         if (!chartData4) return null;
         return {
             labels: chartData4.map((item) => item.week),
@@ -60,7 +66,7 @@ export default function Chart() {
         }
     }, [chartData4]);
 
-    const chachedChartData5 = useMemo(() => {
+    const cachedChartData5 = useMemo(() => {
         if (!chartData5) return null;
         return {
             labels: chartData5.teams.map((item) => item.team),
@@ -71,7 +77,7 @@ export default function Chart() {
             yAxisRightKey: "productivity"
         }
     }, [chartData5]);
-    const chachedChartData6 = useMemo(() => {
+    const cachedChartData6 = useMemo(() => {
         if (!chartData6) return null;
         return {
             labels: chartData6.departments.map((item) => item.name),
@@ -82,8 +88,22 @@ export default function Chart() {
             yAxisRightKey: "morale"
         }
     }, [chartData6]);
-    console.log(chachedChartData5);
-    console.log(chachedChartData6);
+    const chartList = ["바 차트", "도넛 차트", "누적 바 차트", "면적 차트", "멀티 라인 차트"];
+
+    const chartDataList = useMemo<ChartItem[]>(() => {
+        return [
+            { chartData: cachedChartData1, isError: isError1, ChartComponent: BarChart },
+            { chartData: cachedChartData2, isError: isError2, ChartComponent: BarChart },
+            { chartData: cachedChartData1, isError: isError1, ChartComponent: DoughnutChart },
+            { chartData: cachedChartData2, isError: isError2, ChartComponent: DoughnutChart },
+            { chartData: cachedChartData3, isError: isError3, ChartComponent: StackedBarChart },
+            { chartData: cachedChartData4, isError: isError4, ChartComponent: StackedBarChart },
+            { chartData: cachedChartData3, isError: isError3, ChartComponent: AreaChart },
+            { chartData: cachedChartData4, isError: isError4, ChartComponent: AreaChart },
+            { chartData: cachedChartData5, isError: isError5, ChartComponent: MultilineChart },
+            { chartData: cachedChartData6, isError: isError6, ChartComponent: MultilineChart },
+        ]
+    }, [cachedChartData1, cachedChartData2, cachedChartData3, cachedChartData4, cachedChartData5, cachedChartData6, isError1, isError2, isError3, isError4, isError5, isError6])
 
 
 
@@ -102,53 +122,25 @@ export default function Chart() {
                     alignItems: 'start',
                     flexWrap: 'wrap'
                 }}>
-                    <div>
-                        <h2>바 차트</h2>
-                        {chachedChartData1 && (
-                            <BarChart {...chachedChartData1} />
-                        )}
-                        {chachedChartData2 && (
-                            <BarChart {...chachedChartData2} />
-                        )}
-                    </div>
-                    <div>
-                        <h2>도넛 차트</h2>
-                        {chachedChartData1 && (
-                            <DoughnutChart {...chachedChartData1} />
-                        )}
-                        {chachedChartData2 && (
-                            <DoughnutChart {...chachedChartData2} />
-                        )}
-                    </div>
-                    <div>
-                        <h2>스택형 바 차트</h2>
-                        {chachedChartData3 && (
-                            <StackedBarChart {...chachedChartData3} />
-                        )}
-                        {chachedChartData4 && (
-                            <StackedBarChart {...chachedChartData4} />
-                        )}
-                    </div>
-                    <div style={{ width: '100%', maxWidth: '800px', height: '100%', maxHeight: '800px' }}>
-                        <h2>면적 차트</h2>
-                        {chachedChartData3 && (
-                            <AreaChart {...chachedChartData3} />
-                        )}
-                        {chachedChartData4 && (
-                            <AreaChart {...chachedChartData4} />
-                        )}
-                    </div>
-                    <div style={{ width: '100%', maxWidth: '800px', height: '100%', maxHeight: '800px' }}>
-                        <h2>멀티라인 차트</h2>
-                        {chachedChartData5 && (
-                            <MultilineChart {...chachedChartData5} />
-                        )}
-                        {chachedChartData6 && (
-                            <MultilineChart {...chachedChartData6} />
-                        )}
-                    </div>
-                </div>
+                    {chartList.map((chart, index) => {
+                        const firstChart = chartDataList[2 * index];
+                        const secondChart = chartDataList[2 * index + 1];
 
+                        return (
+                            <div key={index} style={{ width: '100%', maxWidth: '800px' }}>
+                                <h2>{chart}</h2>
+                                {firstChart?.chartData && (
+                                    <firstChart.ChartComponent {...firstChart.chartData} />
+                                )}
+                                {firstChart?.isError && <p>데이터를 불러오지 못했습니다.</p>}
+                                {secondChart?.chartData && (
+                                    <secondChart.ChartComponent {...secondChart.chartData} />
+                                )}
+                                {secondChart?.isError && <p>데이터를 불러오지 못했습니다.</p>}
+                            </div>
+                        );
+                    })}
+                </div>
             </main>
         </div>
     );
